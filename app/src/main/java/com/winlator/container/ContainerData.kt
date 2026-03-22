@@ -220,4 +220,6 @@ data class ContainerData(
             },
         )
     }
+    @ColumnInfo(name = "tate_dual_screen_mode", defaultValue = "0")
+    var tateDualScreenMode: Boolean = false
 }
