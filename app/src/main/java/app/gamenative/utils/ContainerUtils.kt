@@ -425,8 +425,18 @@ object ContainerUtils {
         }
 
         container.name = containerData.name
-        container.screenSize = containerData.screenSize
-        container.envVars = containerData.envVars
+		container.screenSize = if (containerData.tateDualScreenMode) {
+            val dm = context.getSystemService(android.content.Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
+            val metrics = android.util.DisplayMetrics()
+            @Suppress("DEPRECATION")
+            dm.getDisplay(android.view.Display.DEFAULT_DISPLAY).getRealMetrics(metrics)
+            val w = minOf(metrics.widthPixels, metrics.heightPixels)
+            val h = maxOf(metrics.widthPixels, metrics.heightPixels) * 2
+            "${w}x${h}"
+        } else {
+            containerData.screenSize
+        }        
+		container.envVars = containerData.envVars
         container.graphicsDriver = containerData.graphicsDriver
         // Save driver config through to container
         container.graphicsDriverConfig = containerData.graphicsDriverConfig
