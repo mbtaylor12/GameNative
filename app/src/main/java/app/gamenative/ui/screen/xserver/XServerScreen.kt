@@ -2799,6 +2799,29 @@ private fun setupXEnvironment(
 
     try {
         environment.startEnvironmentComponents()
+        // TATE dual screen: launch secondary display presentation
+        if (container?.tateDualScreenMode == true) {
+            val dm = context.getSystemService(android.content.Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
+            val secondary = dm.displays.firstOrNull { it.displayId != android.view.Display.DEFAULT_DISPLAY }
+            if (secondary != null) {
+                val metrics = android.util.DisplayMetrics()
+                @Suppress("DEPRECATION")
+                (context.getSystemService(android.content.Context.WINDOW_SERVICE) as android.view.WindowManager)
+                    .defaultDisplay.getRealMetrics(metrics)
+                val physW = minOf(metrics.widthPixels, metrics.heightPixels)
+                val physH = maxOf(metrics.widthPixels, metrics.heightPixels)
+                val tatePresentation = TateDualScreenPresentation(
+                    context               = context,
+                    display               = secondary,
+                    xServer               = xServer,
+                    primaryScreenHeightPx = physH,
+                    combinedHeightPx      = physH * 2,
+                    screenWidthPx         = physW,
+                )
+                tatePresentation.show()
+                PluviaApp.tatePresentation = tatePresentation
+            }
+        }
     } catch (e: Exception) {
         Timber.e(e, "Failed to start environment components, cleaning up")
         try {
