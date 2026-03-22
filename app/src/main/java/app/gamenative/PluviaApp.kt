@@ -186,6 +186,8 @@ class PluviaApp : SplitCompatApplication() {
         var touchpadView: TouchpadView? = null
         var achievementWatcher: app.gamenative.service.AchievementWatcher? = null
 
+        var tatePresentation: app.gamenative.ui.screen.xserver.TateDualScreenPresentation? = null
+        
         var isOverlayPaused by mutableStateOf(false)
         @Volatile
         var isActivityInForeground: Boolean = true
@@ -201,6 +203,8 @@ class PluviaApp : SplitCompatApplication() {
         }
 
         fun clearActiveSuspendState() {
+            tatePresentation?.dismiss()
+            tatePresentation = null
             activeSuspendPolicy = Container.SUSPEND_POLICY_MANUAL
             isOverlayPaused = false
             hasInitializedSuspendPolicyState = false
