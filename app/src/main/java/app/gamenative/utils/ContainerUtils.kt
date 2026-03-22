@@ -314,6 +314,7 @@ object ContainerUtils {
             sharpnessEffect = container.getExtra("sharpnessEffect", "None"),
             sharpnessLevel = container.getExtra("sharpnessLevel", "100").toIntOrNull() ?: 100,
             sharpnessDenoise = container.getExtra("sharpnessDenoise", "100").toIntOrNull() ?: 100,
+			tateDualScreenMode = container.getTateDualScreenMode(),
         )
     }
 
@@ -489,6 +490,7 @@ object ContainerUtils {
         container.putExtra("sharpnessEffect", containerData.sharpnessEffect)
         container.putExtra("sharpnessLevel", containerData.sharpnessLevel.toString())
         container.putExtra("sharpnessDenoise", containerData.sharpnessDenoise.toString())
+		container.setTateDualScreenMode(containerData.tateDualScreenMode)
         try {
             container.language = containerData.language
         } catch (e: Exception) {
