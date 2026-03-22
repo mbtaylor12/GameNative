@@ -1292,4 +1292,10 @@
     <string name="library_source_not_logged_in_epic">Sign in to access your Epic library.</string>
     <string name="library_source_not_logged_in_amazon">Sign in to access your Amazon library.</string>
     <string name="library_source_no_custom_games">You have not added any custom games.</string>
+
+    <!-- TATE -->
+    <string name="tate_dual_screen_section_header">TATE Dual Screen</string>
+    <string name="tate_dual_screen_mode">TATE Dual Screen Mode</string>
+    <string name="tate_dual_screen_mode_summary">Span the game across both screens in portrait (for TATE games like Demon\'s Tilt)</string>
+    <string name="tate_dual_screen_info">Top screen shows upper half, bottom screen shows lower half.</string>
 </resources>
