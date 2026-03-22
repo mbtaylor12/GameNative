@@ -152,6 +152,8 @@ public class Container {
     private String suspendPolicy = SUSPEND_POLICY_MANUAL;
 
     private boolean portraitMode = false;
+    
+    private boolean tateDualScreenMode = false;
 
     private String containerVariant = DEFAULT_VARIANT;
 
@@ -708,6 +710,8 @@ public class Container {
             data.put("suspendPolicy", suspendPolicy);
             data.put("portraitMode", portraitMode);
 
+            data.put("tateDualScreenMode", tateDualScreenMode);
+
             if (!WineInfo.isMainWineVersion(wineVersion)) data.put("wineVersion", wineVersion);
             FileUtils.writeString(getConfigFile(), data.toString());
         }
@@ -903,6 +907,9 @@ public class Container {
                 case "portraitMode":
                     this.portraitMode = data.getBoolean(key);
                     break;
+                case "tateDualScreenMode":
+                    this.tateDualScreenMode = data.getBoolean(key);
+                    break;
             }
         }
     }
@@ -1017,6 +1024,14 @@ public class Container {
 
     public void setPortraitMode(boolean portraitMode) {
         this.portraitMode = portraitMode;
+    }
+
+    public boolean getTateDualScreenMode() {
+        return tateDualScreenMode;
+    }
+
+    public void setTateDualScreenMode(boolean tateDualScreenMode) {
+        this.tateDualScreenMode = tateDualScreenMode;
     }
 
     public String getContainerJson() {
