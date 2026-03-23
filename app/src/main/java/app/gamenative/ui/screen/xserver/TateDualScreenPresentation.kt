@@ -119,6 +119,8 @@ class TateDualScreenPresentation(
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
             val sourceView = PluviaApp.xServerView ?: return
+            if (!sourceView.isAttachedToWindow) return
+            if (!sourceView.isHardwareAccelerated) return
             if (sourceView.width == 0 || sourceView.height == 0) return
 
             val srcBitmap = Bitmap.createBitmap(sourceView.width, sourceView.height, Bitmap.Config.ARGB_8888)
