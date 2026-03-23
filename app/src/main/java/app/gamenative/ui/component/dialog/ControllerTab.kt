@@ -123,6 +123,13 @@ fun ControllerTabContent(state: ContainerConfigState, default: Boolean) {
             state = config.externalDisplaySwap,
             onCheckedChange = { state.config.value = config.copy(externalDisplaySwap = it) },
         )
+        SettingsSwitch(
+            colors = settingsTileColorsAlt(),
+            title = { Text(text = stringResource(R.string.tate_dual_screen_mode)) },
+            subtitle = { Text(text = stringResource(R.string.tate_dual_screen_mode_summary)) },
+            state = config.tateDualScreenMode,
+            onCheckedChange = { state.config.value = config.copy(tateDualScreenMode = it) },
+        )
     }
 
     // Gesture settings full-screen dialog
