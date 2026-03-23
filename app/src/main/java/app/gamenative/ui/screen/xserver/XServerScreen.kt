@@ -1604,8 +1604,15 @@ fun XServerScreen(
                 )
             }
             frameLayout.addView(gameHost)
-            gameHost.addView(xServerView)
-
+            if (container.tateDualScreenMode) {
+                val physH = maxOf(context.resources.displayMetrics.heightPixels, context.resources.displayMetrics.widthPixels)
+                gameHost.addView(xServerView, FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    physH * 2,
+                ))
+            } else {
+                gameHost.addView(xServerView)
+            }
             PluviaApp.inputControlsManager = InputControlsManager(context)
 
             // Store the loaded profile for auto-show logic later (declared outside apply block)
@@ -2799,29 +2806,7 @@ private fun setupXEnvironment(
 
     try {
         environment.startEnvironmentComponents()
-        // TATE dual screen: launch secondary display presentation
-        if (container?.tateDualScreenMode == true) {
-            val dm = context.getSystemService(android.content.Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
-            val secondary = dm.displays.firstOrNull { it.displayId != android.view.Display.DEFAULT_DISPLAY }
-            if (secondary != null) {
-                val metrics = android.util.DisplayMetrics()
-                @Suppress("DEPRECATION")
-                (context.getSystemService(android.content.Context.WINDOW_SERVICE) as android.view.WindowManager)
-                    .defaultDisplay.getRealMetrics(metrics)
-                val physW = minOf(metrics.widthPixels, metrics.heightPixels)
-                val physH = maxOf(metrics.widthPixels, metrics.heightPixels)
-                val tatePresentation = TateDualScreenPresentation(
-                    context               = context,
-                    display               = secondary,
-                    xServer               = xServer,
-                    primaryScreenHeightPx = physH,
-                    combinedHeightPx      = physH * 2,
-                    screenWidthPx         = physW,
-                )
-                tatePresentation.show()
-                PluviaApp.tatePresentation = tatePresentation
-            }
-        }
+
     } catch (e: Exception) {
         Timber.e(e, "Failed to start environment components, cleaning up")
         try {
@@ -2831,7 +2816,31 @@ private fun setupXEnvironment(
         }
         throw e
     }
-
+    
+    // TATE dual screen: launch secondary display presentation
+    if (container?.tateDualScreenMode == true) {
+        val dm = context.getSystemService(android.content.Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
+        val secondary = dm.displays.firstOrNull { it.displayId != android.view.Display.DEFAULT_DISPLAY }
+            if (secondary != null) {
+            val metrics = android.util.DisplayMetrics()
+            @Suppress("DEPRECATION")
+            (context.getSystemService(android.content.Context.WINDOW_SERVICE) as android.view.WindowManager)
+                .defaultDisplay.getRealMetrics(metrics)
+            val physW = minOf(metrics.widthPixels, metrics.heightPixels)
+            val physH = maxOf(metrics.widthPixels, metrics.heightPixels)
+            val tatePresentation = TateDualScreenPresentation(
+                context               = context,
+                display               = secondary,
+                xServer               = xServer,
+                primaryScreenHeightPx = physH,
+                combinedHeightPx      = physH * 2,
+                screenWidthPx         = physW,
+            )
+            tatePresentation.show()
+            PluviaApp.tatePresentation = tatePresentation
+        }
+    }
+    
     if (gameSource == GameSource.STEAM) {
         val gameIdInt = ContainerUtils.extractGameIdFromContainerId(appId)
         val achAppId = SteamService.cachedAchievementsAppId
